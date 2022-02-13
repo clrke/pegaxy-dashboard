@@ -95,8 +95,8 @@ export default function ScholarsDashboard() {
       type: SET_SCHOLARS,
       value: localScholars,
     });
-    let scholarStartDate = localScholars[0].pegas[0].races[0].endDate;
-    let scholarEndDate = localScholars[0].pegas[0].races[0].endDate;
+    let scholarStartDate = new Date();
+    let scholarEndDate = new Date(0);
     localScholars.forEach((scholar, scholarId) => {
       scholar.pegas.forEach((pega, pegaId) => {
         (async () => {
