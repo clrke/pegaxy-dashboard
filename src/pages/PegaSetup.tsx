@@ -186,7 +186,7 @@ export default function PegaSetup() {
       </DataInputSection>
       <ActionsSection>
         <h1>Actions</h1>
-        <GoToDashboardButton onClick={() => navigate("pegaxy-dashboard/scholars")}>
+        <GoToDashboardButton onClick={() => navigate("/pegaxy-dashboard/scholars")}>
           Go to Dashboard
         </GoToDashboardButton>
       </ActionsSection>
