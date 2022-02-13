@@ -9,7 +9,8 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<PegaSetup />} />
-        <Route path="/scholars" element={<ScholarsDashboard />} />
+        <Route path="/pegaxy-dashboard" element={<PegaSetup />} />
+        <Route path="/pegaxy-dashboard/scholars" element={<ScholarsDashboard />} />
       </Routes>
     </BrowserRouter>
   );
