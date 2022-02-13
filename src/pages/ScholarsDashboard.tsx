@@ -95,6 +95,8 @@ export default function ScholarsDashboard() {
       type: SET_SCHOLARS,
       value: localScholars,
     });
+    let scholarStartDate = localScholars[0].pegas[0].races[0].endDate;
+    let scholarEndDate = localScholars[0].pegas[0].races[0].endDate;
     localScholars.forEach((scholar, scholarId) => {
       scholar.pegas.forEach((pega, pegaId) => {
         (async () => {
@@ -136,24 +138,24 @@ export default function ScholarsDashboard() {
               pegaId,
               value: newPega,
             });
-            let startDate = races[0].endDate;
-            let endDate = races[0].endDate;
             races.forEach(race => {
               if (startDate > race.endDate) {
-                startDate = race.endDate;
+                scholarStartDate = race.endDate;
               }
               if (endDate < race.endDate) {
-                endDate = race.endDate;
+                scholarEndDate = race.endDate;
               }
             });
-            setStartDate(startDate);
-            setEndDate(endDate);
+            setStartDate(prev => new Date(Math.max(prev.getTime(), scholarStartDate.getTime())));
+            setEndDate(prev => new Date(Math.max(prev.getTime(), scholarEndDate.getTime())));
           } catch (e) {
             console.log(e);
           }
         })();
       });
     });
+    setStartDate(prev => new Date(Math.max(prev.getTime(), scholarStartDate.getTime())));
+    setEndDate(prev => new Date(Math.max(prev.getTime(), scholarEndDate.getTime())));
   }, [initialValue]);
 
   return (
@@ -206,11 +208,11 @@ export default function ScholarsDashboard() {
                   <React.Fragment key={pegaId}>
                     <ScholarTableCell rowSpan={scholar.pegas.length}>
                       {scholar.name}
-                      ({scholar.pegas.map(pega => {
-                      return pega.races.map(statsFn).reduce((a, b) => {
-                        return a + b;
-                      }, 0)
-                    }).reduce((a, b) => a + b, 0)} {statsLabel})
+                      ({
+                      scholar.pegas
+                        .map(pega => pega.races.map(statsFn).reduce((a, b) => a + b, 0))
+                        .reduce((a, b) => a + b, 0)
+                    } {statsLabel})
                     </ScholarTableCell>
                   </React.Fragment>
                 )}
