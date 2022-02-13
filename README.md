@@ -5,6 +5,11 @@
 View the instructions to install here:
 https://developer.mozilla.org/en-US/docs/Learn/Common_questions/set_up_a_local_testing_server#running_a_simple_local_http_server
 
+## Install the project
+
+1. Download from: https://github.com/clrke/pegaxy-dashboard/archive/refs/heads/main.zip
+2. Unzip the archive
+
 ## Go to the build directory
 
 1. Open a command prompt / terminal
