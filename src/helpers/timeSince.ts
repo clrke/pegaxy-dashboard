@@ -6,11 +6,7 @@ function pluralize(n: number, singular: string, plural: string = ""): string {
 }
 
 export default function timeSince(date: Date): string {
-  console.log("===== timeSince =====");
-  console.log(new Date().getTime());
-  console.log(date.getTime());
   const seconds = Math.floor((new Date().getTime() - date.getTime()) / 1000);
-  console.log(seconds);
 
   const years = seconds / 31536000;
   const floorYears = Math.floor(years);

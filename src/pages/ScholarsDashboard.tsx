@@ -78,12 +78,12 @@ export default function ScholarsDashboard() {
   const [scholars, dispatch] = useReducer<Reducer<Scholar[], ScholarAction>>(scholarsReducer, []);
 
   const [startDate, setStartDate] = useState(new Date());
-  const [endDate, setEndDate] = useState(new Date());
+  const [endDate, setEndDate] = useState(new Date(0));
 
   const [statsLabel, setStatsLabel] = useState("VIS");
   const [statsFn, setStatsFn] = useState(() => (race: Race) => race.reward);
 
-  const dates = Array(Math.ceil((endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24)))
+  const dates = Array(Math.max(0, Math.ceil((endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24))))
     .fill(0)
     .map((_, i) => new Date(startDate.getTime() + i * (1000 * 60 * 60 * 24))).reverse();
 
@@ -139,14 +139,14 @@ export default function ScholarsDashboard() {
               value: newPega,
             });
             races.forEach(race => {
-              if (startDate > race.endDate) {
+              if (scholarStartDate > race.endDate) {
                 scholarStartDate = race.endDate;
               }
-              if (endDate < race.endDate) {
+              if (scholarEndDate < race.endDate) {
                 scholarEndDate = race.endDate;
               }
             });
-            setStartDate(prev => new Date(Math.max(prev.getTime(), scholarStartDate.getTime())));
+            setStartDate(prev => new Date(Math.min(prev.getTime(), scholarStartDate.getTime())));
             setEndDate(prev => new Date(Math.max(prev.getTime(), scholarEndDate.getTime())));
           } catch (e) {
             console.log(e);
