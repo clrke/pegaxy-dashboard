@@ -1,15 +1,15 @@
 {
   "files": {
     "main.css": "https://clrke.github.io/pegaxy-dashboard/static/css/main.073c9b0a.css",
-    "main.js": "https://clrke.github.io/pegaxy-dashboard/static/js/main.e18c2087.js",
+    "main.js": "https://clrke.github.io/pegaxy-dashboard/static/js/main.5e541dc4.js",
     "static/js/787.6533ad1c.chunk.js": "https://clrke.github.io/pegaxy-dashboard/static/js/787.6533ad1c.chunk.js",
     "index.html": "https://clrke.github.io/pegaxy-dashboard/index.html",
     "main.073c9b0a.css.map": "https://clrke.github.io/pegaxy-dashboard/static/css/main.073c9b0a.css.map",
-    "main.e18c2087.js.map": "https://clrke.github.io/pegaxy-dashboard/static/js/main.e18c2087.js.map",
+    "main.5e541dc4.js.map": "https://clrke.github.io/pegaxy-dashboard/static/js/main.5e541dc4.js.map",
     "787.6533ad1c.chunk.js.map": "https://clrke.github.io/pegaxy-dashboard/static/js/787.6533ad1c.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.073c9b0a.css",
-    "static/js/main.e18c2087.js"
+    "static/js/main.5e541dc4.js"
   ]
 }

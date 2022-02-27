@@ -30,6 +30,12 @@ const StatsButton = styled(Button)`
   color: white;
 `;
 
+const ClearDataButton = styled(Button)`
+  margin-top: 24px;
+  background-color: darkred;
+  color: white;
+`;
+
 const ScholarsTable = styled.table`
   border: 1px solid #222;
 `;
@@ -274,11 +280,12 @@ export default function ScholarsDashboard() {
                 {pegaId === 0 && (
                   <React.Fragment key={pegaId}>
                     <ScholarTableCell rowSpan={scholar.pegas.length}>
-                      {scholar.name}&nbsp;
-                      ({
-                      statsAggregateFn(
-                        scholar.pegas.flatMap(pega => pega.races.map(statsFn))
-                      )} {statsLabel})
+                      <div>{scholar.name}</div>
+                      <div>
+                        {
+                          statsAggregateFn(scholar.pegas.flatMap(pega => pega.races.map(statsFn)))
+                        }&nbsp;{statsLabel}
+                      </div>
                     </ScholarTableCell>
                   </React.Fragment>
                 )}
@@ -319,8 +326,17 @@ export default function ScholarsDashboard() {
             ))
           ))}
         </ScholarsTbody>
-
       </ScholarsTable>
+      <ClearDataButton onClick={() => {
+        for (let scholarId = 0; scholarId < scholars.length; scholarId++) {
+          const scholar = scholars[scholarId];
+          for (let pegaId = 0; pegaId < scholar.pegas.length; pegaId++) {
+            const pega = scholar.pegas[pegaId];
+            localStorage.removeItem(`pegaxy-races-${pega.id}`);
+          }
+        }
+        window.location.reload();
+      }}>Clear Data and Refresh</ClearDataButton>
     </Container>
   )
 }
