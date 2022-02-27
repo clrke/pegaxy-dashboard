@@ -74,7 +74,7 @@ const ONE_DAY = 24 * 60 * 60 * 1000;
 
 function ScoreCell(props: { value: string }) {
   return (
-    <ScholarTableCell isBad={props.value === "0"}>{props.value}</ScholarTableCell>
+    <ScholarTableCell isBad={props.value.startsWith("0")}>{props.value}</ScholarTableCell>
   );
 }
 
