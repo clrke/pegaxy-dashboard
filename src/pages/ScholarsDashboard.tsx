@@ -66,39 +66,43 @@ const ScholarTableCell = styled.td<ScholarTableCellProps>`
 
 const ONE_DAY = 24 * 60 * 60 * 1000;
 
-function ScoreCell(props: { value: number }) {
+function ScoreCell(props: { value: string }) {
   return (
-    <ScholarTableCell isBad={props.value === 0}>{props.value}</ScholarTableCell>
+    <ScholarTableCell isBad={props.value === "0"}>{props.value}</ScholarTableCell>
   );
 }
 
 const LdsRing = styled.div`
   display: inline-block;
   position: relative;
-  width: 40px;
-  height: 40px;
+  width: 20px;
+  height: 20px;
 
   div {
     box-sizing: border-box;
     display: block;
     position: absolute;
-    width: 32px;
-    height: 32px;
-    margin: 8px;
-    border: 8px solid;
+    width: 16px;
+    height: 16px;
+    margin: 4px;
+    border: 4px solid;
     border-radius: 50%;
     animation: lds-ring 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
     border-color: #61dafb transparent transparent transparent;
   }
+
   div:nth-child(1) {
     animation-delay: -0.45s;
   }
+
   div:nth-child(2) {
     animation-delay: -0.3s;
   }
+
   div:nth-child(3) {
     animation-delay: -0.15s;
   }
+
   @keyframes lds-ring {
     0% {
       transform: rotate(0deg);
@@ -112,10 +116,10 @@ const LdsRing = styled.div`
 function LoadingIndicator() {
   return (
     <LdsRing>
-      <div></div>
-      <div></div>
-      <div></div>
-      <div></div>
+      <div />
+      <div />
+      <div />
+      <div />
     </LdsRing>
   );
 }
@@ -126,10 +130,13 @@ export default function ScholarsDashboard() {
   const [scholars, dispatch] = useReducer<Reducer<Scholar[], ScholarAction>>(scholarsReducer, []);
 
   const [startDate, setStartDate] = useState(new Date());
-  const [endDate, setEndDate] = useState(new Date(0));
+  const [endDate, setEndDate] = useState(new Date(1625547917265));
 
   const [statsLabel, setStatsLabel] = useState("VIS");
   const [statsFn, setStatsFn] = useState(() => (race: Race) => race.reward);
+  const [statsAggregateFn, setStatsAggregateFn] = useState(
+    () => (values: number[]) => (values.reduce((a, b) => a + b, 0) || 0).toFixed(0)
+  );
 
   const dates = Array(Math.max(0, Math.ceil((endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24))))
     .fill(0)
@@ -145,7 +152,7 @@ export default function ScholarsDashboard() {
     });
     (async () => {
       let scholarStartDate = new Date();
-      let scholarEndDate = new Date(0);
+      let scholarEndDate = new Date(1625547917265);
       for (let scholarId = 0; scholarId < localScholars.length; scholarId++) {
         const scholar = localScholars[scholarId];
         for (let pegaId = 0; pegaId < scholar.pegas.length; pegaId++) {
@@ -188,23 +195,25 @@ export default function ScholarsDashboard() {
               pegaId,
               value: newPega,
             });
-            races.forEach(race => {
-              if (scholarStartDate > race.endDate) {
+            for (let raceId = 0; raceId < races.length; raceId++) {
+              const race = races[raceId];
+              if (race.endDate.getTime() && (scholarStartDate > race.endDate)) {
                 scholarStartDate = race.endDate;
               }
-              if (scholarEndDate < race.endDate) {
+              if (race.endDate.getTime() && (scholarEndDate < race.endDate)) {
                 scholarEndDate = race.endDate;
               }
-            });
-            setStartDate(prev => new Date(Math.min(prev.getTime(), scholarStartDate.getTime())));
-            setEndDate(prev => new Date(Math.max(prev.getTime(), scholarEndDate.getTime())));
+            }
           } catch (e) {
-            console.log(e);
+            console.error(e);
           }
         }
       }
-      setStartDate(prev => new Date(Math.max(prev.getTime(), scholarStartDate.getTime())));
-      setEndDate(prev => new Date(Math.max(prev.getTime(), scholarEndDate.getTime())));
+      console.log("Settings start and end dates...", scholarStartDate, scholarEndDate);
+      setStartDate(scholarStartDate);
+      setEndDate(scholarEndDate);
+      console.log("Set start and end dates!");
+      setStartDate(scholarStartDate);
     })();
   }, [initialValue]);
 
@@ -215,11 +224,19 @@ export default function ScholarsDashboard() {
         <StatsButton disabled={statsLabel === "VIS"} onClick={() => {
           setStatsLabel("VIS");
           setStatsFn(() => (race: Race) => race.reward);
+          setStatsAggregateFn(() => (values: number[]) => (values.reduce((a, b) => a + b, 0) || 0).toFixed(0));
         }}>VIS</StatsButton>
         <StatsButton disabled={statsLabel === "races"} onClick={() => {
           setStatsLabel("races");
           setStatsFn(() => () => 1);
+          setStatsAggregateFn(() => (values: number[]) => (values.reduce((a, b) => a + b, 0) || 0).toFixed(0));
         }}>Races Count</StatsButton>
+        <StatsButton disabled={statsLabel === "win rate"} onClick={() => {
+          setStatsLabel("win rate");
+          setStatsFn(() => (race: Race) => race.reward > 0 ? 1 : 0);
+          setStatsAggregateFn(() => (values: number[]) =>
+            `${(((values.reduce((a, b) => a + b, 0) / values.length) * 100) || 0).toFixed(2)}%`);
+        }}>Win Rate</StatsButton>
       </ModeSelection>
       <h1>Analytics</h1>
       <ScholarsTable>
@@ -257,12 +274,11 @@ export default function ScholarsDashboard() {
                 {pegaId === 0 && (
                   <React.Fragment key={pegaId}>
                     <ScholarTableCell rowSpan={scholar.pegas.length}>
-                      {scholar.name}
+                      {scholar.name}&nbsp;
                       ({
-                      scholar.pegas
-                        .map(pega => pega.races.map(statsFn).reduce((a, b) => a + b, 0))
-                        .reduce((a, b) => a + b, 0)
-                    } {statsLabel})
+                      statsAggregateFn(
+                        scholar.pegas.flatMap(pega => pega.races.map(statsFn))
+                      )} {statsLabel})
                     </ScholarTableCell>
                   </React.Fragment>
                 )}
@@ -279,23 +295,23 @@ export default function ScholarsDashboard() {
                     <LoadingIndicator />
                   )}
                 </ScholarTableCell>
-                <ScholarTableCell>{pega.races.map(statsFn).reduce((a, b) => a + b, 0)}
+                <ScholarTableCell>{statsAggregateFn(pega.races.map(statsFn)) || 0}
                 </ScholarTableCell>
                 {dates.map((date, i) => (
                   <React.Fragment key={i}>
                     <ScoreCell
                       key={`${i}-0`}
-                      value={pega.races.filter(race =>
+                      value={statsAggregateFn(pega.races.filter(race =>
                         race.endDate >= new Date(date.getFullYear(), date.getMonth(), date.getDate(), 0)
                         && race.endDate < new Date(date.getFullYear(), date.getMonth(), date.getDate(), 12)
-                      ).map(statsFn).reduce((a, b) => a + b, 0)}
+                      ).map(statsFn))}
                     />
                     <ScoreCell
                       key={`${i}-12`}
-                      value={pega.races.filter(race =>
+                      value={statsAggregateFn(pega.races.filter(race =>
                         race.endDate >= new Date(date.getFullYear(), date.getMonth(), date.getDate(), 12)
                         && race.endDate < new Date(new Date(date.getFullYear(), date.getMonth(), date.getDate(), 0).getTime() + ONE_DAY)
-                      ).map(statsFn).reduce((a, b) => a + b, 0)}
+                      ).map(statsFn))}
                     />
                   </React.Fragment>
                 ))}
