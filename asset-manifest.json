@@ -1,15 +1,15 @@
 {
   "files": {
-    "main.css": "https://clrke.github.io/pegaxy-dashboard/static/css/main.073c9b0a.css",
-    "main.js": "https://clrke.github.io/pegaxy-dashboard/static/js/main.59a5cad5.js",
-    "static/js/787.6533ad1c.chunk.js": "https://clrke.github.io/pegaxy-dashboard/static/js/787.6533ad1c.chunk.js",
-    "index.html": "https://clrke.github.io/pegaxy-dashboard/index.html",
-    "main.073c9b0a.css.map": "https://clrke.github.io/pegaxy-dashboard/static/css/main.073c9b0a.css.map",
-    "main.59a5cad5.js.map": "https://clrke.github.io/pegaxy-dashboard/static/js/main.59a5cad5.js.map",
-    "787.6533ad1c.chunk.js.map": "https://clrke.github.io/pegaxy-dashboard/static/js/787.6533ad1c.chunk.js.map"
+    "main.css": "/static/css/main.073c9b0a.css",
+    "main.js": "/static/js/main.77367f37.js",
+    "static/js/787.6533ad1c.chunk.js": "/static/js/787.6533ad1c.chunk.js",
+    "index.html": "/index.html",
+    "main.073c9b0a.css.map": "/static/css/main.073c9b0a.css.map",
+    "main.77367f37.js.map": "/static/js/main.77367f37.js.map",
+    "787.6533ad1c.chunk.js.map": "/static/js/787.6533ad1c.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.073c9b0a.css",
-    "static/js/main.59a5cad5.js"
+    "static/js/main.77367f37.js"
   ]
 }

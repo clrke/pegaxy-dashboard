@@ -95,11 +95,13 @@ export default function ScholarsDashboard() {
       type: SET_SCHOLARS,
       value: localScholars,
     });
-    let scholarStartDate = new Date();
-    let scholarEndDate = new Date(0);
-    localScholars.forEach((scholar, scholarId) => {
-      scholar.pegas.forEach((pega, pegaId) => {
-        (async () => {
+    (async () => {
+      let scholarStartDate = new Date();
+      let scholarEndDate = new Date(0);
+      for (let scholarId = 0; scholarId < localScholars.length; scholarId++) {
+        const scholar = localScholars[scholarId];
+        for (let pegaId = 0; pegaId < scholar.pegas.length; pegaId++) {
+          const pega = scholar.pegas[pegaId];
           try {
             const newPegaRaw: RawPega = (await (await fetch(
               `https://api-apollo.pegaxy.io/v1/game-api/pega/${pega.id}`
@@ -151,11 +153,11 @@ export default function ScholarsDashboard() {
           } catch (e) {
             console.log(e);
           }
-        })();
-      });
-    });
-    setStartDate(prev => new Date(Math.max(prev.getTime(), scholarStartDate.getTime())));
-    setEndDate(prev => new Date(Math.max(prev.getTime(), scholarEndDate.getTime())));
+        }
+      }
+      setStartDate(prev => new Date(Math.max(prev.getTime(), scholarStartDate.getTime())));
+      setEndDate(prev => new Date(Math.max(prev.getTime(), scholarEndDate.getTime())));
+    })();
   }, [initialValue]);
 
   return (
