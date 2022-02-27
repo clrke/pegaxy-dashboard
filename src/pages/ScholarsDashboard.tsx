@@ -37,10 +37,12 @@ const ClearDataButton = styled(Button)`
 `;
 
 const ScholarsTable = styled.table`
-  border: 1px solid #222;
 `;
 const ScholarsThead = styled.thead`
   border: 1px solid #222;
+  background-color: #fff;
+  position: sticky;
+  top: 0;
 `;
 const ScholarsTbody = styled.tbody`
   border: 1px solid #222;
