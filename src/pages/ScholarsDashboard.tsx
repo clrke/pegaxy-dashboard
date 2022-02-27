@@ -280,12 +280,14 @@ export default function ScholarsDashboard() {
                 {pegaId === 0 && (
                   <React.Fragment key={pegaId}>
                     <ScholarTableCell rowSpan={scholar.pegas.length}>
-                      <div>{scholar.name}</div>
-                      <div>
-                        {
-                          statsAggregateFn(scholar.pegas.flatMap(pega => pega.races.map(statsFn)))
-                        }&nbsp;{statsLabel}
-                      </div>
+                      <strong>
+                        <div>{scholar.name}</div>
+                        <div>
+                          {
+                            statsAggregateFn(scholar.pegas.flatMap(pega => pega.races.map(statsFn)))
+                          }&nbsp;{statsLabel}
+                        </div>
+                      </strong>
                     </ScholarTableCell>
                   </React.Fragment>
                 )}
@@ -302,7 +304,8 @@ export default function ScholarsDashboard() {
                     <LoadingIndicator />
                   )}
                 </ScholarTableCell>
-                <ScholarTableCell>{statsAggregateFn(pega.races.map(statsFn)) || 0}
+                <ScholarTableCell>
+                  <strong>{statsAggregateFn(pega.races.map(statsFn)) || 0}</strong>
                 </ScholarTableCell>
                 {dates.map((date, i) => (
                   <React.Fragment key={i}>
